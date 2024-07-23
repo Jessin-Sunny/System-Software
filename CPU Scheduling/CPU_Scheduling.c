@@ -282,7 +282,7 @@ void roundrobin()
         {
             i=0;
         }
-        else if(p[i+1].arrival <= time)
+        else if(temp[i+1].arrival <= time)
         {
             i++;
         }
