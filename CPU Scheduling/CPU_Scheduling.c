@@ -1,4 +1,4 @@
-#include <stdio.h>
+  GNU nano 6.2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        CPU_Scheduling.c                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  #include <stdio.h>
 #include <stdlib.h>
 
 struct process
@@ -11,8 +11,8 @@ struct process
     int turnaround;
     int response;
     int waiting;
-    int remaining;
     int completed;
+    int remaining;
 }p[10],temp[10],temp_p;
 
 int n,total_burst,slice;
@@ -57,8 +57,8 @@ void display(struct process* p)
 
 void fcfs()
 {
+    int i,j,total=0;
     initialize();
-    int i,j,total;
     for(i=0;i<n-1;i++)
     {
         for(j=0;j<n-i-1;j++)
@@ -71,28 +71,27 @@ void fcfs()
             }
         }
     }
-    total=0;
     for(i=0;i<n;i++)
     {
         while(temp[i].arrival > total)
         {
             total++;
         }
-        temp[i].completion=temp[i].burst+total;
-        temp[i].response=total-temp[i].arrival;
-        temp[i].waiting=total-temp[i].arrival;
+        temp[i].completion=total+temp[i].burst;
         temp[i].turnaround=temp[i].completion-temp[i].arrival;
-        total+=temp[i].burst;
+        temp[i].waiting=total-temp[i].arrival;
+        temp[i].response=total-temp[i].arrival;
+        total=total+temp[i].burst;
     }
     display(temp);
 }
 
 void sjf()
 {
-    initialize();
-    int completed=0,currenttime=0;
     int i,j;
+    int completed=0,currenttime=0;
     int minindex,minimum;
+    initialize();
     for(i=0;i<n-1;i++)
     {
         for(j=0;j<n-i-1;j++)
@@ -120,15 +119,15 @@ void sjf()
     while(completed!=n)
     {
         minindex=-1;
-        minimum=total_burst;
+        minimum=100000;
         for(i=0;i<n;i++)
         {
             if(temp[i].arrival <= currenttime && temp[i].completed == 0)
             {
                 if(temp[i].burst < minimum)
                 {
-                    minimum=temp[i].burst;
                     minindex=i;
+                    minimum=temp[i].burst;
                 }
                 if(temp[i].burst == minimum)
                 {
@@ -146,13 +145,13 @@ void sjf()
         }
         else
         {
-            temp[minindex].completed=1;
-            completed++;
-            temp[minindex].completion=temp[minindex].burst+currenttime;
-            temp[minindex].response=currenttime-temp[minindex].arrival;
-            temp[minindex].waiting=currenttime-temp[minindex].arrival;
+            temp[minindex].completion=currenttime+temp[minindex].burst;
             temp[minindex].turnaround=temp[minindex].completion-temp[minindex].arrival;
-            currenttime+=temp[minindex].burst;
+            temp[minindex].waiting=currenttime-temp[minindex].arrival;
+            temp[minindex].response=currenttime-temp[minindex].arrival;
+            temp[minindex].completed=1;
+            currenttime=currenttime+temp[minindex].burst;
+            completed++;
         }
     }
     display(temp);
@@ -160,10 +159,10 @@ void sjf()
 
 void priority()
 {
-    initialize();
-    int completed=0,currenttime=0;
     int i,j;
-    int minindex,maxpriority;
+    int completed=0,currenttime=0;
+    int minindex,minimum;
+    initialize();
     for(i=0;i<n-1;i++)
     {
         for(j=0;j<n-i-1;j++)
@@ -191,22 +190,22 @@ void priority()
     while(completed!=n)
     {
         minindex=-1;
-        maxpriority=10000;
+        minimum=100000;
         for(i=0;i<n;i++)
         {
             if(temp[i].arrival <= currenttime && temp[i].completed == 0)
             {
-                if(temp[i].priority < maxpriority)
+                if(temp[i].priority < minimum)
                 {
-                    maxpriority=temp[i].priority;
                     minindex=i;
+                    minimum=temp[i].priority;
                 }
-                if(temp[i].priority == maxpriority)
+                if(temp[i].priority == minimum)
                 {
                     if(temp[i].arrival < temp[minindex].arrival)
                     {
                         minindex=i;
-                        maxpriority=temp[i].priority;
+                        minimum=temp[i].priority;
                     }
                 }
             }
@@ -217,13 +216,13 @@ void priority()
         }
         else
         {
-            temp[minindex].completed=1;
-            completed++;
-            temp[minindex].completion=temp[minindex].burst+currenttime;
-            temp[minindex].response=currenttime-temp[minindex].arrival;
-            temp[minindex].waiting=currenttime-temp[minindex].arrival;
+            temp[minindex].completion=currenttime+temp[minindex].burst;
             temp[minindex].turnaround=temp[minindex].completion-temp[minindex].arrival;
-            currenttime+=temp[minindex].burst;
+            temp[minindex].waiting=currenttime-temp[minindex].arrival;
+            temp[minindex].response=currenttime-temp[minindex].arrival;
+            temp[minindex].completed=1;
+            currenttime=currenttime+temp[minindex].burst;
+            completed++;
         }
     }
     display(temp);
@@ -231,9 +230,9 @@ void priority()
 
 void roundrobin()
 {
-    initialize();
     int i,j;
-    int remaining=n,time=0,flag=0;
+    int remaining=n,flag=0,currenttime=0;
+    initialize();
     for(i=0;i<n-1;i++)
     {
         for(j=0;j<n-i-1;j++)
@@ -247,42 +246,41 @@ void roundrobin()
         }
     }
     i=0;
-    while(remaining != 0)
+    while(remaining!=0)
     {
-        if(temp[i].arrival > time)      //if the process has not yet arrived
+        if(temp[i].arrival > currenttime)
         {
-            time++;
-            continue;
+            currenttime++;
         }
-        if(temp[i].remaining == temp[i].burst)  //calculating response time
+        if(temp[i].remaining == temp[i].burst)
         {
-            temp[i].response=time-temp[i].arrival;
+            temp[i].response=currenttime;
         }
         if(temp[i].remaining <= slice && temp[i].remaining > 0)
         {
-            time+=temp[i].burst;
-            temp[i].remaining=0;
             flag=1;
+            currenttime+=temp[i].remaining;
+            temp[i].remaining=0;
         }
-        else if(temp[i].remaining > 0)
+        else if(temp[i].remaining > slice)
         {
             temp[i].remaining-=slice;
-            time+=slice;
+            currenttime+=slice;
         }
         if(temp[i].remaining == 0 && flag == 1)
         {
-            remaining--;
             flag=0;
-            temp[i].completion=time;
-            temp[i].waiting=temp[i].completion-temp[i].arrival-temp[i].burst;
+            temp[i].completion=currenttime;
             temp[i].turnaround=temp[i].completion-temp[i].arrival;
             temp[i].completed=1;
+            temp[i].waiting=temp[i].completion-temp[i].arrival-temp[i].burst;
+            remaining--;
         }
         if(i==n-1)
         {
             i=0;
         }
-        else if(temp[i+1].arrival <= time)
+        else if(temp[i+1].arrival <= currenttime)
         {
             i++;
         }
@@ -297,7 +295,7 @@ void roundrobin()
 void main()
 {
     int i;
-    printf("How many processes ? : ");
+    printf("How many process ? : ");
     scanf("%d",&n);
     for(i=0;i<n;i++)
     {
