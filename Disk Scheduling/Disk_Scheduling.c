@@ -1,4 +1,4 @@
-  GNU nano 6.2                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Disk_Scheduling.c                                                                                                                                                                                                                                                                                                                                                                                                                                                                           #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int n,r[25],size,initial,traversal;
