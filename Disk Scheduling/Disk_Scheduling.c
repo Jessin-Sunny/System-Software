@@ -172,6 +172,8 @@ void cscan()
         }
         seek+=abs(current-0);
         current=0;
+        seek+=abs(size-1-current);
+        current=size-1;
         for(i=0;i<index;i++)
         {
             seek+=abs(r[i]-current);
