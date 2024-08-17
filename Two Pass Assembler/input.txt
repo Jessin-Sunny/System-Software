@@ -1,1 +1,9 @@
-h
+PGM1    START   1000
+*       LDA     ALPHA
+*       MUL     BETA
+*       STA     GAMMA
+ALPHA   WORD    2
+BETA    WORD    4
+SIGMA   BYTE    C'ZZ'
+GAMMA   RESW      1
+*       END
