@@ -32,7 +32,7 @@ void main()
     {
         if(strcmp(label,"#")!=0)
         {
-            fprintf(fp2,"%d\t",locctr);
+            fprintf(fp2,"%X\t",locctr);
             if(strcmp(label,"*")!=0)
             {
                 while(fscanf(fp4,"%s\t%d",symbol,sym_loc)!=EOF)
