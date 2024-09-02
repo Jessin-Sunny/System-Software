@@ -1,9 +1,9 @@
-        PGM1    START   1000
- 3E8    *       LDA     ALPHA
- 3EB    *       MUL     BETA
- 3EE    *       STA     GAMMA
- 3F1    ALPHA   WORD    2
- 3F4    BETA    WORD    4
- 3F7    SIGMA   BYTE    C'ZZ'
- 3F9    GAMMA   RESW    1
+        PGM1    START   4096
+1000    *       LDA     ALPHA
+1003    *       MUL     BETA
+1006    *       STA     GAMMA
+1009    ALPHA   WORD    2
+100C    BETA    WORD    4
+100F    SIGMA   BYTE    C'ZZ'
+1011    GAMMA   RESW    1
                 END
