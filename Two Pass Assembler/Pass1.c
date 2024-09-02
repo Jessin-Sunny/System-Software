@@ -5,9 +5,10 @@
 void main()
 {
     char label[10],opcode[10],operand[10],symbol[10],code[10],mnemonic[3];
-    int locctr,start,length,*sym_loc;
-    int error,op_found;
+    int locctr,start,length,*sym_loc,sym_count=0;
+    int error=0,op_found;
     char error_desc[100];
+    char sym_tab[50][50];
     FILE *fp1,*fp2,*fp3,*fp4;
 
     fp1=fopen("input.txt","r");
@@ -35,17 +36,22 @@ void main()
             fprintf(fp2,"%4X\t",locctr);
             if(strcmp(label,"*")!=0)
             {
-                while(fscanf(fp4,"%s\t%d",symbol,sym_loc)!=EOF)
+                for(int i=0;i<sym_count;i++)
                 {
-                    if(strcmp(symbol,label)==0)
+                    if (strcmp(sym_tab[i],label)==0)
                     {
                         error=1;
-                        strcat(error_desc,"ERROR Duplicate Symbol Found : ");
+                        strcat(error_desc,"ERROR: Duplicate Symbol Found: ");
                         strcat(error_desc,label);
                         break;
                     }
                 }
-                fprintf(fp4,"%s\t%X\n",label,locctr);
+                if(!error)
+                {
+                    strcpy(sym_tab[sym_count],label);
+                    sym_count++;
+                    fprintf(fp4,"%s\t%X\n",label,locctr);
+                }
             }
             fscanf(fp3,"%s\t%s",code,mnemonic);
             if(strcmp(opcode,"WORD")==0)
