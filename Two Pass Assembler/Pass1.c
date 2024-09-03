@@ -19,9 +19,9 @@ void main()
 
     if(strcmp(opcode,"START")==0)
     {
-        start=atoi(operand);
+        sscanf(operand,"%X",&start);
         locctr=start;
-        fprintf(fp2,"\t%s\t%s\t%s\n",label,opcode,operand);
+        fprintf(fp2,"\t%s\t%s\t%X\n",label,opcode,locctr);
         fscanf(fp1,"%s\t%s\t%s",label,opcode,operand);
     }
     else
