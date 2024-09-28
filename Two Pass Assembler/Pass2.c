@@ -102,11 +102,11 @@ void read_line()
 
 int main()
 {
-    fp1=fopen("output1.txt", "r");
+    fp1=fopen("intermediate.txt", "r");
     fp2=fopen("symtab.txt", "r");
     fp3=fopen("optab.txt", "r");
     fp4=fopen("length.txt", "r");
-    fp5=fopen("output2.txt", "w");
+    fp5=fopen("output.txt", "w");
     fp6=fopen("object_program.txt", "w");
 
     if (fp1==NULL||fp2==NULL||fp3==NULL||fp4==NULL||fp5==NULL||fp6==NULL)
