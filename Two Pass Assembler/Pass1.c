@@ -5,16 +5,17 @@
 void main()
 {
     char label[10],opcode[10],operand[10],symbol[10],code[10],mnemonic[3];
-    int locctr,start,length,*sym_loc,sym_count=0;
+    int locctr,start,length,*sym_loc,sym_count=0,size,prevlocctr=0;
     int error=0,op_found;
     char error_desc[100];
     char sym_tab[50][50];
-    FILE *fp1,*fp2,*fp3,*fp4;
+    FILE *fp1,*fp2,*fp3,*fp4,*fp5;
 
     fp1=fopen("input.txt","r");
-    fp2=fopen("output.txt","w");
+    fp2=fopen("intermediate.txt","w");
     fp3=fopen("optab.txt","r");
     fp4=fopen("symtab.txt","w");
+    fp5=fopen("length.txt","w");
     fscanf(fp1,"%s\t%s\t%s",label,opcode,operand);
 
     if(strcmp(opcode,"START")==0)
@@ -56,18 +57,22 @@ void main()
             fscanf(fp3,"%s\t%s",code,mnemonic);
             if(strcmp(opcode,"WORD")==0)
             {
+                prevlocctr=locctr;
                 locctr+=3;
             }
             else if(strcmp(opcode,"RESW")==0)
             {
+                prevlocctr=locctr;
                 locctr+=(3*(atoi(operand)));
             }
             else if(strcmp(opcode,"RESB")==0)
             {
+                prevlocctr=locctr;
                 locctr+=(atoi(operand));
             }
             else if(strcmp(opcode,"BYTE")==0)
             {
+                prevlocctr=locctr;
                 locctr+=strlen(operand)-3;//C''
             }
             else
@@ -78,6 +83,7 @@ void main()
                     if(strcmp(opcode,code)==0)
                     {
                         op_found=1;
+                        prevlocctr=locctr;
                         locctr+=3;
                         break;
                     }
@@ -106,12 +112,15 @@ void main()
     }
     else
     {
-        fprintf(fp2,"\t\t%s\n",opcode);
+        fprintf(fp2,"*\t*\t%s\t*\n",opcode);
         length=locctr-start;
+        size=prevlocctr-start;
+        fprintf(fp5,"%X\t%X\n",length,size);
         printf("The length of the code : %d\n",length);
     }
     fclose(fp1);
     fclose(fp2);
     fclose(fp3);
     fclose(fp4);
+    fclose(fp5);
 }
