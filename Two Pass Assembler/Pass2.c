@@ -127,7 +127,7 @@ int main()
     {
         fprintf(fp5,"%s\t%s\t%s\t%s\n",address,label,opcode,operand); // Print header line in assembly listing
         fprintf(fp6,"H^%s^00%s^0000%s\n",label,operand,length);
-        fprintf(fp6,"T^00%s^F",operand);
+        fprintf(fp6,"T^00%s^%s",operand,size);
         read_line();
     }
 
