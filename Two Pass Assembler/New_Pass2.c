@@ -85,12 +85,13 @@ void main()
                     {
                         // Handle BYTE with hexadecimal value
                         strncpy(obj_code, &operand[2], strlen(operand) - 3);  // Skip X'...'
+                        obj_code[strlen(operand)-3]='\0';
                         obj_generated=1;
                     }
                     else if (operand[0] == 'C')
                     {
                         // Handle BYTE with character value
-                        for (int i = 2; i < strlen(operand) - 1; i++)
+                        for (int i = 2; i < strlen(operand) - 2; i++)
                         {
                             char byte_val[3];
                             sprintf(byte_val, "%02X", operand[i]);  // Convert each char to hex
