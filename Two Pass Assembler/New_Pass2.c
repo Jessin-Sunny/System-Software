@@ -21,7 +21,7 @@ void main()
     fp6=fopen("object_program.txt","w");
 
     fscanf(fp1,"%s\t%s\t%s\t%s",locctr,label,opcode,operand);
-    //fscanf(fp4,"%s\t%s\t%s",length,size);
+    fscanf(fp4,"%s\t%s\t",length,size);
     if(strcmp(opcode,"START") == 0)
     {
         fprintf(fp5,"\t%s\t%s\t%s\n",label,opcode,operand);
